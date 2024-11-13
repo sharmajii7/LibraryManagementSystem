@@ -41,49 +41,51 @@
 </head>
 <body>
 <?php include("components/header.php"); ?>
-    <h2> Registered Students </h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th> # </th>
-                <th> Student ID </th>
-                <th> Student Name </th>
-                <th> Email </th>
-                <th> Mobile Number </th>
-                <th> Registration Date </th>
-                <th> Status </th>
-                <th> Action </th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php 
-                $records = mysqli_query($conn, "SELECT * FROM students;");
-                $rownum = 1;
-                if(mysqli_num_rows($records) > 0) {
-                    foreach($records as $record) {
-            ?>
-            <tr>
-                <td><?php echo $rownum; ?></td>
-                <td><?php echo $record["studentID"]; ?></td>
-                <td><?php echo $record["name"]; ?></td>
-                <td><?php echo $record["email"]; ?></td>
-                <td><?php echo $record["phoneNumber"]; ?></td>
-                <td><?php echo $record["regDate"]; ?></td>
-                <td><?php echo (($record["status"]) ? "Active" : "Blocked"); ?></td>
-                <td>
-                    <?php if($record["status"]) { ?>
-                    <a href="manageStudent.php?block=<?php echo $record["id"]; ?>"><button> Block </button>
-                    <?php } else { ?>
-                    <a href="manageStudent.php?activate=<?php echo $record["id"]; ?>"><button> Activate </button>
-                    <?php } ?>
-                </td>
-            </tr>
-            <?php 
-                $rownum++; 
-                }}
-            ?>
-        </tbody>
-    </table>
+    <div class="container mt-5">
+        <h2 class="mb-4"> Registered Students </h2>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th> # </th>
+                    <th> Student ID </th>
+                    <th> Student Name </th>
+                    <th> Email </th>
+                    <th> Mobile Number </th>
+                    <th> Registration Date </th>
+                    <th> Status </th>
+                    <th> Action </th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                    $records = mysqli_query($conn, "SELECT * FROM students;");
+                    $rownum = 1;
+                    if(mysqli_num_rows($records) > 0) {
+                        foreach($records as $record) {
+                ?>
+                <tr>
+                    <td><?php echo $rownum; ?></td>
+                    <td><?php echo $record["studentID"]; ?></td>
+                    <td><?php echo $record["name"]; ?></td>
+                    <td><?php echo $record["email"]; ?></td>
+                    <td><?php echo $record["phoneNumber"]; ?></td>
+                    <td><?php echo $record["regDate"]; ?></td>
+                    <td><?php echo (($record["status"]) ? "Active" : "Blocked"); ?></td>
+                    <td>
+                        <?php if($record["status"]) { ?>
+                            <a href="manageStudent.php?block=<?php echo $record["id"]; ?>"><button class="btn btn-warning"> Block </button></a>
+                        <?php } else { ?>
+                            <a href="manageStudent.php?activate=<?php echo $record["id"]; ?>"><button class="btn btn-success"> Activate </button></a>
+                        <?php } ?>
+                    </td>
+                </tr>
+                <?php 
+                    $rownum++; 
+                    }}
+                ?>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
 <?php 

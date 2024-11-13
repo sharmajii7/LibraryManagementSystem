@@ -17,11 +17,18 @@
 </head>
 <body>
     <?php include("components/header.php"); ?>
-    <h2> Add Author </h2>
-    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"])?>" method="post">
-    <label> Author Name: </label>
-    <input type="text" name="author" required />
-    <input type="submit" name="submit" value="Add"/>
+    
+    <div class="container my-5">
+        <h2 class="mb-4">Add Author</h2>
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="author" class="form-label">Author Name</label>
+                <input type="text" class="form-control" id="author" name="author" required>
+                <div class="invalid-feedback">Please enter the author's name.</div>
+            </div>
+            <button type="submit" name="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
 </body>
 </html>
 <?php 
@@ -31,15 +38,13 @@
         $uniqueauthor = mysqli_query($conn, "SELECT * FROM authors where authorName = '$author';");
         if(mysqli_num_rows($uniqueauthor) > 0) {
             echo "<script> alert('Author is already registered.') </script>";
-        }
-        else {
+        } else {
             try {
                 mysqli_query($conn, "INSERT INTO authors (authorName) VALUES ('$author');");
-            }
-            catch (mysqli_sql_exception) {
+                echo "<script> alert('Author added successfully.'); </script>";
+            } catch (mysqli_sql_exception) {
                 echo "<script> alert('Database error. Please try again later.'); </script>";
             }
-            echo "<script> alert('Author added successfully.'); </script>";
         }
     }
     mysqli_close($conn);

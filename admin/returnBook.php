@@ -17,36 +17,45 @@
 </head>
 <body>
     <?php include("components/header.php"); ?>
-    <h2> Return Book </h2>
-    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"])?>" method="post">
-    <?php 
-        include("components/database.php");
-        $id = intval($_GET["issueID"]);
-        $records = mysqli_query($conn, "SELECT s.name AS studentName, b.bookName AS bookName, b.isbn AS isbn, 
-                    i.issueDate AS issueDate, i.returnDate AS returnDate, i.id AS id, i.fine AS fine 
-                    FROM issue i, students s, books b 
-                    WHERE i.studentID = s.studentID AND i.bookID = b.isbn AND i.id = '$id';");
-        foreach($records as $record) {
-    ?>
-    <label> Student Name: </label>
-    <?php echo $record["studentName"]; ?>
-    <br>
-    <label> Book Name: </label>
-    <?php echo $record["bookName"]; ?>
-    <br>
-    <label> ISBN: </label>
-    <?php echo $record["isbn"]; ?>
-    <br>
-    <label> Issue Date: </label>
-    <?php echo $record["issueDate"]; ?>
-    <br>
-    <label> Fine: </label>
-    <input type="text" name="fine" required>
-    <?php }  ?>
-    <br>
-    <input type="submit" name="return" value="Return Book"/>
+    <div class="container mt-5">
+        <h2> Return Book </h2>
+        <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"])?>" method="post">
+        <?php 
+            include("components/database.php");
+            $id = intval($_GET["issueID"]);
+            $records = mysqli_query($conn, "SELECT s.name AS studentName, b.bookName AS bookName, b.isbn AS isbn, 
+                        i.issueDate AS issueDate, i.returnDate AS returnDate, i.id AS id, i.fine AS fine 
+                        FROM issue i, students s, books b 
+                        WHERE i.studentID = s.studentID AND i.bookID = b.isbn AND i.id = '$id';");
+            foreach($records as $record) {
+        ?>
+        <div class="mb-3">
+            <label class="form-label">Student Name:</label>
+            <p><?php echo $record["studentName"]; ?></p>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Book Name:</label>
+            <p><?php echo $record["bookName"]; ?></p>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">ISBN:</label>
+            <p><?php echo $record["isbn"]; ?></p>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Issue Date:</label>
+            <p><?php echo $record["issueDate"]; ?></p>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Fine:</label>
+            <input type="text" name="fine" class="form-control" required>
+        </div>
+        <?php }  ?>
+        <button type="submit" name="return" class="btn btn-primary">Return Book</button>
+        </form>
+    </div>
 </body>
 </html>
+
 <?php 
     include("components/database.php");
     if(isset($_POST["return"])) {

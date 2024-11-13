@@ -16,53 +16,57 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<?php include("components/header.php"); ?>
-    <h2> Manage Issued Books </h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th> # </th>
-                <th> Student Name </th>
-                <th> Book Name </th>
-                <th> ISBN </th>
-                <th> Issued Date </th>
-                <th> Return Date </th>
-                <th> Fine </th>
-                <th> Action </th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php 
-                include("components/database.php");
-                $records = mysqli_query($conn, "SELECT s.name AS studentName, b.bookName AS bookName, b.isbn AS isbn, 
-                    i.issueDate AS issueDate, i.returnDate AS returnDate, i.id AS id, i.fine AS fine 
-                    FROM issue i, students s, books b 
-                    WHERE i.studentID = s.studentID AND i.bookID = b.isbn 
-                    ORDER BY i.id DESC;");
-                $rownum = 1;
-                if(mysqli_num_rows($records) > 0) {
-                    foreach($records as $record) {
-            ?>
-            <tr>
-                <td><?php echo $rownum; ?></td>
-                <td><?php echo $record["studentName"]; ?></td>
-                <td><?php echo $record["bookName"]; ?></td>
-                <td><?php echo $record["isbn"]; ?></td>
-                <td><?php echo $record["issueDate"]; ?></td>
-                <td><?php echo (($record["returnDate"] == "") ? "Not Returned Yet" : $record["returnDate"]); ?></td>
-                <td><?php echo (($record["fine"]) ? $record["fine"] : "-"); ?></td>
-                <td>
-                    <?php if($record["returnDate"] == "") { ?>
-                    <a href="returnBook.php?issueID=<?php echo $record["id"]?>"><button> Return </button>
-                    <?php } ?>
-                </td>
-            </tr>
-            <?php 
-                $rownum++; 
-                }}
-                mysqli_close($conn);
-            ?>
-        </tbody>
-    </table>
+    <?php include("components/header.php"); ?>
+    <div class="container mt-4">
+        <h2>Manage Issued Books</h2>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th> # </th>
+                    <th> Student Name </th>
+                    <th> Book Name </th>
+                    <th> ISBN </th>
+                    <th> Issued Date </th>
+                    <th> Return Date </th>
+                    <th> Fine </th>
+                    <th> Action </th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                    include("components/database.php");
+                    $records = mysqli_query($conn, "SELECT s.name AS studentName, b.bookName AS bookName, b.isbn AS isbn, 
+                        i.issueDate AS issueDate, i.returnDate AS returnDate, i.id AS id, i.fine AS fine 
+                        FROM issue i, students s, books b 
+                        WHERE i.studentID = s.studentID AND i.bookID = b.isbn 
+                        ORDER BY i.id DESC;");
+                    $rownum = 1;
+                    if(mysqli_num_rows($records) > 0) {
+                        foreach($records as $record) {
+                ?>
+                <tr>
+                    <td><?php echo $rownum; ?></td>
+                    <td><?php echo $record["studentName"]; ?></td>
+                    <td><?php echo $record["bookName"]; ?></td>
+                    <td><?php echo $record["isbn"]; ?></td>
+                    <td><?php echo $record["issueDate"]; ?></td>
+                    <td><?php echo (($record["returnDate"] == "") ? "Not Returned Yet" : $record["returnDate"]); ?></td>
+                    <td><?php echo (($record["fine"]) ? $record["fine"] : "-"); ?></td>
+                    <td>
+                        <?php if($record["returnDate"] == "") { ?>
+                        <a href="returnBook.php?issueID=<?php echo $record["id"]?>">
+                            <button class="btn btn-warning btn-sm"> Return </button>
+                        </a>
+                        <?php } ?>
+                    </td>
+                </tr>
+                <?php 
+                    $rownum++; 
+                    }}
+                    mysqli_close($conn);
+                ?>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
