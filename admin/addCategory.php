@@ -17,16 +17,25 @@
 </head>
 <body>
     <?php include("components/header.php"); ?>
-    <h2> Add Category </h2>
-    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"])?>" method="post">
-    <label> Category Name: </label>
-    <input type="text" name="category" required />
-    <br>
-    <label> Status: </label>
-    <label> <input type="radio" name="status" value="1" checked="checked"> Active </label>
-    <label> <input type="radio" name="status" value="0"> Inactive </label>
-    <br>
-    <input type="submit" name="submit" value="Add"/>
+    <div class="container mt-5">
+        <h2 class="mb-4"> Add Category </h2>
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-group">
+            <div class="mb-3">
+                <label for="category" class="form-label">Category Name:</label>
+                <input type="text" name="category" id="category" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Status:</label><br>
+                <label class="form-check-label me-3">
+                    <input type="radio" name="status" value="1" class="form-check-input" checked> Active
+                </label>
+                <label class="form-check-label">
+                    <input type="radio" name="status" value="0" class="form-check-input"> Inactive
+                </label>
+            </div>
+            <button type="submit" name="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
 </body>
 </html>
 <?php 
@@ -34,18 +43,18 @@
     if(isset($_POST["submit"])) {
         $category = $_POST["category"];
         $status = $_POST["status"];
-        $uniquecategory = mysqli_query($conn, "SELECT * FROM category where categoryName = '$category';");
+        $uniquecategory = mysqli_query($conn, "SELECT * FROM category WHERE categoryName = '$category';");
         if(mysqli_num_rows($uniquecategory) > 0) {
             echo "<script> alert('Category is already registered.') </script>";
         }
         else {
             try {
                 mysqli_query($conn, "INSERT INTO category (categoryName, status) VALUES ('$category', '$status');");
+                echo "<script> alert('Category added successfully.'); </script>";
             }
             catch (mysqli_sql_exception) {
                 echo "<script> alert('Database error. Please try again later.'); </script>";
             }
-            echo "<script> alert('Category added successfully.'); </script>";
         }
     }
     mysqli_close($conn);

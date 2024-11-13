@@ -17,47 +17,49 @@
 </head>
 <body>
 <?php include("components/header.php"); ?>
-    <h2> Manage Books </h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th> # </th>
-                <th> Book Name </th>
-                <th> Category </th>
-                <th> Author </th>
-                <th> ISBN </th>
-                <th> Price </th>
-                <th> Action </th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php 
-                include("components/database.php");
-                $records = mysqli_query($conn, "SELECT books.bookName AS bookName, category.categoryName AS categoryName, 
-                    authors.authorName AS authorName, books.isbn AS isbn, books.bookPrice AS bookPrice, books.id AS id 
-                    FROM books, category, authors WHERE books.authorID = authors.ID AND books.categoryID = category.ID;");
-                $rownum = 1;
-                if(mysqli_num_rows($records) > 0) {
-                    foreach($records as $record) {
-            ?>
-            <tr>
-                <td><?php echo $rownum; ?></td>
-                <td><?php echo $record["bookName"]; ?></td>
-                <td><?php echo $record["categoryName"]; ?></td>
-                <td><?php echo $record["authorName"]; ?></td>
-                <td><?php echo $record["isbn"]; ?></td>
-                <td><?php echo $record["bookPrice"]; ?></td>
-                <td>
-                    <a href="editBook.php?bookid=<?php echo $record["id"]?>"><button> Edit </button>
-                    <a href="manageBook.php?delete=<?php echo $record["id"]?>"><button> Delete </button>
-                </td>
-            </tr>
-            <?php 
-                $rownum++; 
-                }}
-            ?>
-        </tbody>
-    </table>
+    <div class="container my-4">
+        <h2 class="text-center mb-4"> Manage Books </h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th> # </th>
+                    <th> Book Name </th>
+                    <th> Category </th>
+                    <th> Author </th>
+                    <th> ISBN </th>
+                    <th> Price </th>
+                    <th> Action </th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                    include("components/database.php");
+                    $records = mysqli_query($conn, "SELECT books.bookName AS bookName, category.categoryName AS categoryName, 
+                        authors.authorName AS authorName, books.isbn AS isbn, books.bookPrice AS bookPrice, books.id AS id 
+                        FROM books, category, authors WHERE books.authorID = authors.ID AND books.categoryID = category.ID;");
+                    $rownum = 1;
+                    if(mysqli_num_rows($records) > 0) {
+                        foreach($records as $record) {
+                ?>
+                <tr>
+                    <td><?php echo $rownum; ?></td>
+                    <td><?php echo $record["bookName"]; ?></td>
+                    <td><?php echo $record["categoryName"]; ?></td>
+                    <td><?php echo $record["authorName"]; ?></td>
+                    <td><?php echo $record["isbn"]; ?></td>
+                    <td><?php echo $record["bookPrice"]; ?></td>
+                    <td>
+                        <a href="editBook.php?bookid=<?php echo $record["id"]?>" class="btn btn-warning btn-sm"> Edit </a>
+                        <a href="manageBook.php?delete=<?php echo $record["id"]?>" class="btn btn-danger btn-sm"> Delete </a>
+                    </td>
+                </tr>
+                <?php 
+                    $rownum++; 
+                    }}
+                ?>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
 <?php 

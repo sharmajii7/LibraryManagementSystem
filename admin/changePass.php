@@ -17,15 +17,24 @@
 </head>
 <body>
     <?php include("components/header.php"); ?>
-    <h2> Change Password </h2>
-    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"])?>" method="post">
-    <label> Current Password: </label>
-    <input type="password" name="currpass" required />
-    <label> New Password: </label>
-    <input type="password" name="pass" required />
-    <label> Confirm Password: </label>
-    <input type="password" name="confpass" required />
-    <input type="submit" name="change" value="Change Password"/>
+    <div class="container mt-5">
+        <h2 class="mb-4"> Change Password </h2>
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-group">
+            <div class="mb-3">
+                <label for="currpass" class="form-label">Current Password:</label>
+                <input type="password" name="currpass" id="currpass" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label for="pass" class="form-label">New Password:</label>
+                <input type="password" name="pass" id="pass" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label for="confpass" class="form-label">Confirm Password:</label>
+                <input type="password" name="confpass" id="confpass" class="form-control" required />
+            </div>
+            <button type="submit" name="change" class="btn btn-primary">Change Password</button>
+        </form>
+    </div>
 </body>
 </html>
 <?php
@@ -35,7 +44,7 @@
         $currpass = $_POST["currpass"];
         $pass = $_POST["pass"];
         $confpass = $_POST["confpass"];
-        $records = mysqli_query($conn, "SELECT * FROM admin where username = '$username';");
+        $records = mysqli_query($conn, "SELECT * FROM admin WHERE username = '$username';");
         $oldpass = NULL;
         foreach($records as $record) {
             $oldpass = $record["password"];
@@ -51,12 +60,12 @@
             $hash = password_hash($pass, PASSWORD_DEFAULT);
             try {
                 mysqli_query($conn, "UPDATE admin SET password='$hash' WHERE username = '$username';");
+                $_SESSION['message'] = "<script> alert('Password updated successfully.'); </script>";
+                header("Location: dashboard.php");
             }
             catch (mysqli_sql_exception) {
                 echo "<script> alert('Database error. Please try again later.'); </script>";
             }
-            $_SESSION['message'] = "<script> alert('Password updated successfully.'); </script>";
-            header("Location: dashboard.php");
         }
     }
     mysqli_close($conn);
